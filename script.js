@@ -1,19 +1,19 @@
-var computed = false;
-var decimal = 0;
+var my_computed = false;
+var my_decimal = 0;
 
 function convert (entryform, from, to) {
-    convertfrom = from.selectedIndex;
-    convertto = to.selectedIndex;
-    entryform.display.value = (entryform.input.value * from[convertfrom].value / to[convertto].value);
+    convertfrom_index = from.selectedIndex;
+    convertto_index = to.selectedIndex;
+    entryform.display.value = (entryform.input.value * from[convertfrom_index].value / to[convertto_index].value);
 }
 
 function addChar (input, character) {
-    if((character == "." && decimal == 0) || character != ".") {
+    if((character == "." && my_decimal == 0) || character != ".") {
         (input.value == "" || input.value == "0") ? input.value = character : input.value += character;
         convert(input.form, input.form.measure1, input.form.measure2);
-        computed = true;
+        my_computed = true;
         if (character == ".") {
-            decimal = 1;
+            my_decimal = 1;
         }
     }
 }
@@ -25,7 +25,7 @@ function openVothcom () {
 function clear (form) {
     form.testinput.value = 0;
     form.display.value = 0;
-    decimal = 0;
+    my_decimal = 0;
 }
 
 function changeBackground(hexNumber) {

@@ -4,13 +4,13 @@ function gettheDate() {
     document.getElementById("data").innerHTML = TheDate;
 }
 
-var timerID = null;
-var timerRunning = false;
+var myTimerID = null;
+var myTimerRunning = false;
 
 function stopclock() {
-    if (timerRunning) {
-        clearTimeout(timerID);
-        timerRunning = false;
+    if (myTimerRunning) {
+        clearTimeout(myTimerID);
+        myTimerRunning = false;
     }
 }
 
@@ -21,15 +21,15 @@ function startclock() {
 }
 
 function showtime() {
-    var now = new Date();
-    var hours = now.getHours();
-    var minutes = now.getMinutes();
-    var seconds = now.getSeconds();
-    var timeValue = "" + ((hours > 12) ? hours - 12 : hours);
-    timeValue += ((minutes < 10) ? ":0" : ":") + minutes;
-    timeValue += ((seconds < 10) ? ":0" : ":") + seconds;
-    timeValue += (hours >= 12) ? " P.M." : " A.M.";
+    var now_date = new Date();
+    var now_horus = now_date.getHours();
+    var now_minutes = now_date.getMinutes();
+    var now_seconds = now_date.getSeconds();
+    var timeValue = "" + ((now_horus > 12) ? now_horus - 12 : now_horus);
+    timeValue += ((now_minutes < 10) ? ":0" : ":") + now_minutes;
+    timeValue += ((now_seconds < 10) ? ":0" : ":") + now_seconds;
+    timeValue += (now_horus >= 12) ? " P.M." : " A.M.";
     document.getElementById("zegarek").innerHTML = timeValue;
-    timerID = setTimeout("showtime()", 1000);
-    timerRunning = true;
+    myTimerID = setTimeout("showtime()", 1000);
+    myTimerRunning = true;
 }
