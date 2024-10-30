@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Language" content="pl" />
+    <meta name="Author" content="Lukasz Szostak" />
+    <title>Javascript strona</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="navigation.css">
+    <link rel="stylesheet" href="script_java_style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body onload="startclock()">
+    <a href="index.html" class="main-title">Inżynieria wsteczna</a>
+<table>
+    <tr>
+        <td>
+            <a href="assembly.html" class="nav-btn">Assembly</a>
+        </td>
+        <td>
+            <a href="dekompilacja.html" class="nav-btn">Dekompilacja</a>
+        </td>
+        <td>
+            <a href="narzedzia.html" class="nav-btn">Narzedzia</a>
+        </td>
+        <td>
+            <a href="typyplikow.html" class="nav-btn">Typy plikow</a>
+        </td>
+        <td>
+            <a href="metodyinzynieri.html" class="nav-btn">Metody inżynierii wstecznej</a>
+        </td>
+        <td>
+            <a href="kontakt.html" class="nav-btn">Kontakt</a>
+        </td>
+    </tr>
+</table>
+    <div id="animacjaTestowa1" class="test-block">Kliknij, a sie powieksze</div>
+    <div id="animacjaTestowa2" class="test-block">Najedz, a sie powieksze</div>
+    <div id="animacjaTestowa3" class="test-block">Kliknij, abym urosl</div>
+
+    <script>
+        $("#animacjaTestowa1").on("click", function () {
+        $(this).animate(
+            {
+            width: "500px",
+            opacity: 0.4,
+            fontSize: "3em",
+            borderWidth: "10px",
+            },
+            1500
+        );
+        });
+
+        $("#animacjaTestowa2").on({
+        mouseover: function () {
+            $(this).animate(
+            {
+                width: 300,
+            },
+            800
+            );
+        },
+        mouseout: function () {
+            $(this).animate(
+            {
+                width: 200,
+            },
+            800
+            );
+        },
+        });
+
+        $("#animacjaTestowa3").on("click", function(){
+        if (!$(this).is("animated")) {
+            $(this).animate({
+                width: "+-" + 50,
+                height: "+=" + 10,
+                opacity: "-=" + 0.1,
+                duration: 3000
+            });
+        }
+        });
+    </script>
+</body>
+</html>
