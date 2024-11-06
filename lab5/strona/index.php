@@ -1,7 +1,6 @@
 <?php
 error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING);
 
-// Page routing
 if($_GET['idp'] == '' || !isset($_GET['idp'])) {
     $page = 'html/index.html';
 } elseif($_GET['idp'] == 'assembly') {
@@ -16,6 +15,8 @@ if($_GET['idp'] == '' || !isset($_GET['idp'])) {
     $page = 'html/metodyinzynieri.html';
 } elseif($_GET['idp'] == 'kontakt') {
     $page = 'html/kontakt.html';
+} elseif($_GET['idp'] == 'filmy'){
+    $page = 'html/filmy.html';
 }
 ?>
 
@@ -38,6 +39,7 @@ if($_GET['idp'] == '' || !isset($_GET['idp'])) {
             <td><a href="index.php?idp=narzedzia" class="nav-btn">Narzedzia</a></td>
             <td><a href="index.php?idp=typyplikow" class="nav-btn">Typy plikow</a></td>
             <td><a href="index.php?idp=metodyinzynieri" class="nav-btn">Metody inżynierii wstecznej</a></td>
+            <td><a href="index.php?idp=filmy" class="nav-btn">Filmy</a></td>
             <td><a href="index.php?idp=kontakt" class="nav-btn">Kontakt</a></td>
         </tr>
     </table>
