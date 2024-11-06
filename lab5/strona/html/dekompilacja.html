@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Language" content="pl" />
+    <meta name="Author" content="Lukasz Szostak" />
+    <title>Dekompilacja</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/navigation.css">
+</head>
+<body>
+    <a href="index.html" class="main-title">Inżynieria wsteczna</a>
+<table>
+    <tr>
+        <td>
+            <a href="assembly.html" class="nav-btn">Assembly</a>
+        </td>
+        <td>
+            <a href="dekompilacja.html" class="nav-btn">Dekompilacja</a>
+        </td>
+        <td>
+            <a href="narzedzia.html" class="nav-btn">Narzedzia</a>
+        </td>
+        <td>
+            <a href="typyplikow.html" class="nav-btn">Typy plikow</a>
+        </td>
+        <td>
+            <a href="metodyinzynieri.html" class="nav-btn">Metody inżynierii wstecznej</a>
+        </td>
+        <td>
+            <a href="kontakt.html" class="nav-btn">Kontakt</a>
+        </td>
+    </tr>
+</table>
+    <div class="section about">
+        <h2>Dekompilacja</h2>
+        
+        <p>Dekompilacja kodu w programach do reverse engineeringu (inżynierii wstecznej) polega na przekształceniu skompilowanego kodu maszynowego (binarny) z powrotem w bardziej czytelną formę, taką jak kod źródłowy w wysokopoziomowym języku programowania lub przynajmniej w kod asemblera. Jednak proces ten nie jest perfekcyjny, ponieważ kompilacja jest procesem nieodwracalnym — niektóre informacje z kodu źródłowego są tracone podczas kompilacji.</p>
+
+        <p><span class="focus">Przykład dekompilacji programem IDA</span></p>
+
+        <p>1. Wczytanie pliku</p>
+        <img src="../img/ida_1.png" style="width: 700px;" alt="">
+        <br>
+        <p>2. Znalezienie startu programu</p>
+        <img src="../img/ida_2.png" style="width: 700px;" alt="">
+        <br>
+        <p>3. Odszukanie naszego kodu</p>
+        <img src="../img/ida_3.png" style="width: 700px;" alt="">
+        <br>
+        <br>
+        <p>Po tym kroku musimy drogą dedukcji definiować struktury które zostały użyte w programie, jakie zawierają właściwości, jak mogą się nazywać funkcje itp.</p>
+        <img src="../img/ida_4.png" style="width: 700px;" alt="">
+        <p>Tutaj znalazłem funkcje która zwraca nam serial number naszego dysku twardego, domyśliłem sie tego po tym gdyż mamy w funkcji GetVolumeInformation flaga o nazwie "VolumeSerialNumber"</p>
+    </div>
+</body>
+</html>
