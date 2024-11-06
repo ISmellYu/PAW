@@ -3,19 +3,19 @@ error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING);
 
 // Page routing
 if($_GET['idp'] == '' || !isset($_GET['idp'])) {
-    $page = 'html/glowna.html';
+    $page = 'strona/html/glowna.html';
 } elseif($_GET['idp'] == 'assembly') {
-    $page = 'html/assembly.html';
+    $page = 'strona/html/assembly.html';
 } elseif($_GET['idp'] == 'dekompilacja') {
-    $page = 'html/dekompilacja.html';
+    $page = 'strona/html/dekompilacja.html';
 } elseif($_GET['idp'] == 'narzedzia') {
-    $page = 'html/narzedzia.html';
+    $page = 'strona/html/narzedzia.html';
 } elseif($_GET['idp'] == 'typyplikow') {
-    $page = 'html/typyplikow.html';
+    $page = 'strona/html/typyplikow.html';
 } elseif($_GET['idp'] == 'metodyinzynieri') {
-    $page = 'html/metodyinzynieri.html';
+    $page = 'strona/html/metodyinzynieri.html';
 } elseif($_GET['idp'] == 'kontakt') {
-    $page = 'html/kontakt.html';
+    $page = 'strona/html/kontakt.html';
 }
 ?>
 
@@ -26,8 +26,8 @@ if($_GET['idp'] == '' || !isset($_GET['idp'])) {
     <meta http-equiv="Content-Language" content="pl" />
     <meta name="Author" content="Lukasz Szostak" />
     <title>Inżynieria wsteczna</title>
-    <link rel="stylesheet" href="/css/style.css" />
-    <link rel="stylesheet" href="/css/navigation.css">
+    <link rel="stylesheet" href="strona/css/style.css" />
+    <link rel="stylesheet" href="strona/css/navigation.css">
 </head>
 <body>
     <a href="index.php" class="main-title">Inżynieria wsteczna</a>
