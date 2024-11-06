@@ -1,114 +1,76 @@
-<!DOCTYPE html>
-<html lang="pl">
-<head>
-    <meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
-    <meta http-equiv="Content-Language" content="pl" />
-    <meta name="Author" content="Lukasz Szostak" />
-    <title>Javascript strona</title>
-    <link rel="stylesheet" href="../css/style.css" />
-    <link rel="stylesheet" href="../css/navigation.css">
-    <link rel="stylesheet" href="../css/script_java_style.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="../js/script.js" defer></script>
-    <script src="../js/script2.js" defer></script>
-</head>
-<body onload="startclock()">
-    <a href="index.html" class="main-title">Inżynieria wsteczna</a>
-<table>
-    <tr>
-        <td>
-            <a href="assembly.html" class="nav-btn">Assembly</a>
-        </td>
-        <td>
-            <a href="dekompilacja.html" class="nav-btn">Dekompilacja</a>
-        </td>
-        <td>
-            <a href="narzedzia.html" class="nav-btn">Narzedzia</a>
-        </td>
-        <td>
-            <a href="typyplikow.html" class="nav-btn">Typy plikow</a>
-        </td>
-        <td>
-            <a href="metodyinzynieri.html" class="nav-btn">Metody inżynierii wstecznej</a>
-        </td>
-        <td>
-            <a href="kontakt.html" class="nav-btn">Kontakt</a>
-        </td>
-    </tr>
-</table>
-    <div class="section about">
-        <FORM METHOD="POST" NAME="background">
-            <INPUT TYPE="button" VALUE="żółty" ONCLICK="changeBackground('#FFFF00')">
-            <INPUT TYPE="button" VALUE="czarny" ONCLICK="changeBackground('#000000')">
-            <INPUT TYPE="button" VALUE="biały" ONCLICK="changeBackground('#FFFFFF')">
-            <INPUT TYPE="button" VALUE="zielony" ONCLICK="changeBackground('#00FF00')">
-            <INPUT TYPE="button" VALUE="niebieski" ONCLICK="changeBackground('#0000FF')">
-            <INPUT TYPE="button" VALUE="pomarańczowy" ONCLICK="changeBackground('#FF8000')">
-            <INPUT TYPE="button" VALUE="szary" ONCLICK="changeBackground('#C0C0C0')">
-            <INPUT TYPE="button" VALUE="czerwony" ONCLICK="changeBackground('#FF0000')">
-        </FORM>        
-    </div>
+<script src="/js/script.js"></script>
+<script src="/js/script2.js"></script>
+<div class="section about" onload="startclock()">
+    <FORM METHOD="POST" NAME="background">
+        <INPUT TYPE="button" VALUE="żółty" ONCLICK="changeBackground('#FFFF00')">
+        <INPUT TYPE="button" VALUE="czarny" ONCLICK="changeBackground('#000000')">
+        <INPUT TYPE="button" VALUE="biały" ONCLICK="changeBackground('#FFFFFF')">
+        <INPUT TYPE="button" VALUE="zielony" ONCLICK="changeBackground('#00FF00')">
+        <INPUT TYPE="button" VALUE="niebieski" ONCLICK="changeBackground('#0000FF')">
+        <INPUT TYPE="button" VALUE="pomarańczowy" ONCLICK="changeBackground('#FF8000')">
+        <INPUT TYPE="button" VALUE="szary" ONCLICK="changeBackground('#C0C0C0')">
+        <INPUT TYPE="button" VALUE="czerwony" ONCLICK="changeBackground('#FF0000')">
+    </FORM>        
+</div>
 
-    <form name="formtest">
-        <input type="text" name="testinput" value="0">
-        <input type="button" value="7" onclick="addChar(formtest.testinput, '7')">
-        <input type="button" value="8" onclick="addChar(formtest.testinput, '8')">
-        <input type="button" value="9" onclick="addChar(formtest.testinput, '9')">
-    </form>
+<form name="formtest">
+    <input type="text" name="testinput" value="0">
+    <input type="button" value="7" onclick="addChar(formtest.testinput, '7')">
+    <input type="button" value="8" onclick="addChar(formtest.testinput, '8')">
+    <input type="button" value="9" onclick="addChar(formtest.testinput, '9')">
+</form>
 
-    <div id="zegarek" style="text-align: center;"></div>
-    <div id="data" style="text-align: center;"></div>
-    <br>
-    <br>
-    <br>
-    <div style="color: red; text-align: center;">lab3</div>
+<div id="zegarek" style="text-align: center;"></div>
+<div id="data" style="text-align: center;"></div>
+<br>
+<br>
+<br>
+<div style="color: red; text-align: center;">lab3</div>
 
-    <div id="animacjaTestowa1" class="test-block">Kliknij, a sie powieksze</div>
-    <div id="animacjaTestowa2" class="test-block">Najedz, a sie powieksze</div>
-    <div id="animacjaTestowa3" class="test-block">Kliknij, abym urosl</div>
+<div id="animacjaTestowa1" class="test-block">Kliknij, a sie powieksze</div>
+<div id="animacjaTestowa2" class="test-block">Najedz, a sie powieksze</div>
+<div id="animacjaTestowa3" class="test-block">Kliknij, abym urosl</div>
 
-    <script>
-        $("#animacjaTestowa1").on("click", function () {
+<script>
+    $("#animacjaTestowa1").on("click", function () {
+    $(this).animate(
+        {
+        width: "500px",
+        opacity: 0.4,
+        fontSize: "3em",
+        borderWidth: "10px",
+        },
+        1500
+    );
+    });
+
+    $("#animacjaTestowa2").on({
+    mouseover: function () {
         $(this).animate(
-            {
-            width: "500px",
-            opacity: 0.4,
-            fontSize: "3em",
-            borderWidth: "10px",
-            },
-            1500
+        {
+            width: 300,
+        },
+        800
         );
-        });
-
-        $("#animacjaTestowa2").on({
-        mouseover: function () {
-            $(this).animate(
-            {
-                width: 300,
-            },
-            800
-            );
+    },
+    mouseout: function () {
+        $(this).animate(
+        {
+            width: 200,
         },
-        mouseout: function () {
-            $(this).animate(
-            {
-                width: 200,
-            },
-            800
-            );
-        },
-        });
+        800
+        );
+    },
+    });
 
-        $("#animacjaTestowa3").on("click", function(){
-        if (!$(this).is("animated")) {
-            $(this).animate({
-                width: "+-" + 50,
-                height: "+=" + 10,
-                opacity: "-=" + 0.1,
-                duration: 3000
-            });
-        }
+    $("#animacjaTestowa3").on("click", function(){
+    if (!$(this).is("animated")) {
+        $(this).animate({
+            width: "+-" + 50,
+            height: "+=" + 10,
+            opacity: "-=" + 0.1,
+            duration: 3000
         });
-    </script>
-</body>
-</html>
+    }
+    });
+</script>
