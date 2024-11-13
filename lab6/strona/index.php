@@ -1,22 +1,24 @@
 <?php
 error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING);
+include("config.php");
+include("showpage.php");
 
 if($_GET['idp'] == '' || !isset($_GET['idp'])) {
-    $page = 'html/index.html';
+    $page = PokazPodstrone(4);
 } elseif($_GET['idp'] == 'assembly') {
-    $page = 'html/assembly.html';
+    $page = PokazPodstrone(1);
 } elseif($_GET['idp'] == 'dekompilacja') {
-    $page = 'html/dekompilacja.html';
+    $page = PokazPodstrone(2);
 } elseif($_GET['idp'] == 'narzedzia') {
-    $page = 'html/narzedzia.html';
+    $page = PokazPodstrone(8);
 } elseif($_GET['idp'] == 'typyplikow') {
-    $page = 'html/typyplikow.html';
+    $page = PokazPodstrone(9);
 } elseif($_GET['idp'] == 'metodyinzynieri') {
-    $page = 'html/metodyinzynieri.html';
+    $page = PokazPodstrone(7);
 } elseif($_GET['idp'] == 'kontakt') {
-    $page = 'html/kontakt.html';
+    $page = PokazPodstrone(6);
 } elseif($_GET['idp'] == 'filmy'){
-    $page = 'html/filmy.html';
+    $page = PokazPodstrone(3);
 }
 ?>
 
@@ -45,11 +47,7 @@ if($_GET['idp'] == '' || !isset($_GET['idp'])) {
     </table>
 
     <?php
-    if(file_exists($page)) {
-        include($page);
-    } else {
-        echo '<div class="section about"><h2>Nie znaleziono strony</h2></div>';
-    }
+    echo $page;
     $nr_indeksu = '169368';
     $nrGrupy = '4';
     echo 'Autor: Łukasz Szostak '.$nr_indeksu.' grupa '.$nrGrupy.' <br /><br />';
