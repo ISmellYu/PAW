@@ -30,6 +30,7 @@ if($_GET['idp'] == '' || !isset($_GET['idp'])) {
     <meta name="Author" content="Lukasz Szostak" />
     <title>Inżynieria wsteczna</title>
     <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/admin.css" />
     <link rel="stylesheet" href="css/navigation.css">
 </head>
 <body>
