@@ -1,0 +1,183 @@
+/* Style dla formularzy */
+.contact-form,
+.password-reset-form {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 30px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #1a1a1a;
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    background-color: #fff;
+}
+
+.form-control:read-only {
+    background-color: #f3f4f6;
+    cursor: not-allowed;
+}
+
+.form-control:focus {
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+    outline: none;
+}
+
+textarea.form-control {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.btn-submit {
+    width: 100%;
+    background: #4f46e5;
+    color: white;
+    padding: 14px 28px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-submit:hover {
+    background: #4338ca;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+}
+
+/* Komunikaty */
+.alert {
+    padding: 16px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: 500;
+}
+
+.alert.success {
+    background: #10b981;
+    color: white;
+}
+
+.alert.error {
+    background: #ef4444;
+    color: white;
+}
+
+h2 {
+    color: #1a1a1a;
+    margin-bottom: 30px;
+    font-size: 24px;
+    font-weight: 600;
+    text-align: center;
+}
+
+/* Responsywność */
+@media (max-width: 768px) {
+    .contact-form,
+    .password-reset-form {
+        margin: 20px;
+        padding: 20px;
+    }
+    
+    .form-control {
+        padding: 10px;
+        font-size: 14px;
+    }
+    
+    .btn-submit {
+        padding: 12px 24px;
+        font-size: 14px;
+    }
+}
+
+/* Dodatkowe style dla formularza kontaktowego */
+.contact-form .form-group:last-child {
+    margin-bottom: 0;
+}
+
+/* Style dla pól readonly */
+input[readonly] {
+    opacity: 0.7;
+    background-color: #f3f4f6;
+}
+
+/* Efekty hover dla pól formularza */
+.form-control:hover:not([readonly]) {
+    border-color: #6b7280;
+}
+
+/* Style dla placeholderów */
+::placeholder {
+    color: #9ca3af;
+    opacity: 1;
+}
+
+:-ms-input-placeholder {
+    color: #9ca3af;
+}
+
+::-ms-input-placeholder {
+    color: #9ca3af;
+}
+
+/* Dodatkowe style dla przycisków */
+.btn-submit:active {
+    transform: translateY(0);
+}
+
+.btn-submit:focus {
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.2);
+}
+
+/* Style dla nagłówków sekcji */
+.section-title {
+    text-align: center;
+    color: #1a1a1a;
+    font-size: 32px;
+    margin-bottom: 40px;
+    font-weight: 700;
+}
+
+/* Animacje */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.alert {
+    animation: fadeIn 0.3s ease-out;
+}
