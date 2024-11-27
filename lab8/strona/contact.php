@@ -27,16 +27,6 @@ function PokazKontakt() {
             </div>
             
             <div class="form-group">
-                <label for="email">Email odbiorcy:</label>
-                <input type="email" 
-                       name="email" 
-                       id="email" 
-                       class="form-control" 
-                       value="admin@example.com" 
-                       readonly>
-            </div>
-            
-            <div class="form-group">
                 <label for="temat">Temat wiadomości:</label>
                 <input type="text" 
                        name="temat" 
