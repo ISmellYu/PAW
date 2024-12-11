@@ -434,3 +434,60 @@ textarea.form-control {
         margin-bottom: 20px;
     }
 }
+
+.categories-tree {
+    background: white;
+    border-radius: 16px;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.category-item {
+    margin-bottom: 20px;
+}
+
+.category-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.subcategories {
+    margin-left: 30px;
+    margin-top: 10px;
+}
+
+.subcategory-item {
+    margin-bottom: 10px;
+}
+
+.subcategory-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+}
+
+.category-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-menu {
+    padding: 10px 20px;
+    background: #4f46e5;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    margin-right: 10px;
+}
+
+.btn-menu:hover {
+    background: #4338ca;
+}
