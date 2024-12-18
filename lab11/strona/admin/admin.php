@@ -400,6 +400,270 @@ function UsunKategorie() {
     }
 }
 
+// Wyświetla listę wszystkich produktów w formie kartek
+function PokazProdukty() {
+    global $conn;
+    
+    $query = "SELECT p.*, c.nazwa as kategoria_nazwa 
+              FROM products p 
+              LEFT JOIN categories c ON p.kategoria = c.id 
+              ORDER BY p.id DESC";
+    $result = mysqli_query($conn, $query);
+    
+    $wynik = '<div class="panel-admin">';
+    $wynik .= '<h2>Lista Produktów</h2>';
+    
+    // Przycisk dodawania nowego produktu
+    $wynik .= '<div class="admin-actions">';
+    $wynik .= '<a href="admin.php?action=addproduct" class="btn-add">+ Dodaj Nowy Produkt</a>';
+    $wynik .= '</div>';
+    
+    $wynik .= '<div class="product-grid">';
+    
+    while($row = mysqli_fetch_array($result)) {
+        $status = SprawdzStatusProduktu($row);
+        
+        $wynik .= '<div class="product-card">';
+        $wynik .= '<div class="product-image">';
+        if($row['zdjecie']) {
+            $wynik .= '<img src="' . htmlspecialchars($row['zdjecie']) . '" alt="' . htmlspecialchars($row['tytul']) . '">';
+        } else {
+            $wynik .= '<div class="no-image">Brak zdjęcia</div>';
+        }
+        $wynik .= '</div>';
+        
+        $wynik .= '<div class="product-info">';
+        $wynik .= '<h3>' . htmlspecialchars($row['tytul']) . '</h3>';
+        $wynik .= '<p class="product-category">Kategoria: ' . htmlspecialchars($row['kategoria_nazwa'] ?? 'Brak') . '</p>';
+        $wynik .= '<p class="product-price">Cena: ' . number_format($row['cena_netto'] * (1 + $row['podatek_vat']), 2) . ' zł</p>';
+        $wynik .= '<p class="product-stock">Stan magazynowy: ' . $row['ilosc'] . ' szt.</p>';
+        
+        $wynik .= '<div class="product-status ' . $status['class'] . '">';
+        $wynik .= '<span class="status-dot"></span>';
+        $wynik .= '<span class="status-text">' . $status['text'] . '</span>';
+        $wynik .= '</div>';
+        
+        $wynik .= '<div class="product-dates">';
+        $wynik .= '<small>Utworzono: ' . $row['data_utworzenia'] . '</small><br>';
+        $wynik .= '<small>Modyfikacja: ' . $row['data_modyfikacji'] . '</small><br>';
+        $wynik .= '<small>Wygasa: ' . $row['data_wygasniecia'] . '</small>';
+        $wynik .= '</div>';
+        
+        $wynik .= '<div class="product-actions">';
+        $wynik .= '<a href="admin.php?action=editproduct&id=' . $row['id'] . '" class="btn-edit">Edytuj</a>';
+        $wynik .= '<a href="admin.php?action=deleteproduct&id=' . $row['id'] . '" class="btn-delete" onclick="return confirm(\'Czy na pewno chcesz usunąć ten produkt?\')">Usuń</a>';
+        $wynik .= '</div>';
+        
+        $wynik .= '</div>';
+        $wynik .= '</div>';
+    }
+    
+    $wynik .= '</div>';
+    $wynik .= '</div>';
+    
+    return $wynik;
+}
+
+// Sprawdza status produktu na podstawie jego danych
+function SprawdzStatusProduktu($produkt) {
+    $dzis = new DateTime();
+    $data_wygasniecia = new DateTime($produkt['data_wygasniecia']);
+    
+    if ($produkt['ilosc'] <= 0) {
+        return ['text' => 'Brak w magazynie', 'class' => 'unavailable'];
+    }
+    
+    if ($data_wygasniecia < $dzis) {
+        return ['text' => 'Wygasły', 'class' => 'expired'];
+    }
+    
+    if ($produkt['ilosc'] < 5) {
+        return ['text' => 'Końcówka', 'class' => 'low-stock'];
+    }
+    
+    return ['text' => 'Dostępny', 'class' => 'available'];
+}
+
+// Formularz dodawania/edycji produktu
+function FormularzProduktu($id = null) {
+    global $conn;
+    
+    $tytul = '';
+    $cena_netto = '';
+    $podatek_vat = 0.23;
+    $ilosc = '';
+    $kategoria = '';
+    $zdjecie = '';
+    $data_wygasniecia = '';
+    $tytul_formularza = 'Dodaj Nowy Produkt';
+    $akcja = 'addproduct';
+    $przycisk = 'Dodaj produkt';
+    
+    if($id) {
+        $query = "SELECT * FROM products WHERE id = " . intval($id) . " LIMIT 1";
+        $result = mysqli_query($conn, $query);
+        $row = mysqli_fetch_array($result);
+        
+        if($row) {
+            $tytul = $row['tytul'];
+            $cena_netto = $row['cena_netto'];
+            $podatek_vat = $row['podatek_vat'];
+            $ilosc = $row['ilosc'];
+            $kategoria = $row['kategoria'];
+            $zdjecie = $row['zdjecie'];
+            $data_wygasniecia = $row['data_wygasniecia'];
+            $tytul_formularza = 'Edytuj Produkt';
+            $akcja = 'updateproduct';
+            $przycisk = 'Zapisz zmiany';
+        }
+    }
+    
+    $wynik = '<div class="panel-admin">';
+    $wynik .= '<h2>' . $tytul_formularza . '</h2>';
+    $wynik .= '<form method="post" action="admin.php?action=' . $akcja . '" class="edit-form" enctype="multipart/form-data">';
+    
+    if($id) {
+        $wynik .= '<input type="hidden" name="id" value="' . $id . '">';
+    }
+    
+    $wynik .= '<div class="form-group">';
+    $wynik .= '<label for="tytul">Tytuł produktu:</label>';
+    $wynik .= '<input type="text" name="tytul" id="tytul" value="' . htmlspecialchars($tytul) . '" class="form-control" required>';
+    $wynik .= '</div>';
+    
+    $wynik .= '<div class="form-group">';
+    $wynik .= '<label for="cena_netto">Cena netto:</label>';
+    $wynik .= '<input type="number" step="0.01" name="cena_netto" id="cena_netto" value="' . $cena_netto . '" class="form-control" required>';
+    $wynik .= '</div>';
+    
+    $wynik .= '<div class="form-group">';
+    $wynik .= '<label for="podatek_vat">VAT (jako ułamek, np. 0.23 dla 23%):</label>';
+    $wynik .= '<input type="number" step="0.01" name="podatek_vat" id="podatek_vat" value="' . $podatek_vat . '" class="form-control" required>';
+    $wynik .= '</div>';
+    
+    $wynik .= '<div class="form-group">';
+    $wynik .= '<label for="ilosc">Ilość w magazynie:</label>';
+    $wynik .= '<input type="number" name="ilosc" id="ilosc" value="' . $ilosc . '" class="form-control" required>';
+    $wynik .= '</div>';
+    
+    $wynik .= '<div class="form-group">';
+    $wynik .= '<label for="kategoria">Kategoria:</label>';
+    $wynik .= '<select name="kategoria" id="kategoria" class="form-control">';
+    
+    // Pobierz listę kategorii
+    $query = "SELECT * FROM categories ORDER BY nazwa ASC";
+    $result = mysqli_query($conn, $query);
+    while($row = mysqli_fetch_array($result)) {
+        $wynik .= '<option value="' . $row['id'] . '"' . ($kategoria == $row['id'] ? ' selected' : '') . '>' 
+               . htmlspecialchars($row['nazwa']) . '</option>';
+    }
+    
+    $wynik .= '</select>';
+    $wynik .= '</div>';
+    
+    $wynik .= '<div class="form-group">';
+    $wynik .= '<label for="zdjecie">Zdjęcie (URL):</label>';
+    $wynik .= '<input type="text" name="zdjecie" id="zdjecie" value="' . htmlspecialchars($zdjecie) . '" class="form-control">';
+    $wynik .= '</div>';
+    
+    $wynik .= '<div class="form-group">';
+    $wynik .= '<label for="data_wygasniecia">Data wygaśnięcia:</label>';
+    $wynik .= '<input type="date" name="data_wygasniecia" id="data_wygasniecia" value="' . $data_wygasniecia . '" class="form-control" required>';
+    $wynik .= '</div>';
+    
+    $wynik .= '<div class="form-buttons">';
+    $wynik .= '<input type="submit" name="submit" value="' . $przycisk . '" class="btn-save">';
+    $wynik .= '<a href="admin.php?action=products" class="btn-cancel">Anuluj</a>';
+    $wynik .= '</div>';
+    
+    $wynik .= '</form>';
+    $wynik .= '</div>';
+    
+    return $wynik;
+}
+
+// Dodawanie nowego produktu
+function DodajProdukt() {
+    global $conn;
+    
+    if(isset($_POST['submit'])) {
+        $tytul = mysqli_real_escape_string($conn, $_POST['tytul']);
+        $cena_netto = floatval($_POST['cena_netto']);
+        $podatek_vat = floatval($_POST['podatek_vat']);
+        $ilosc = intval($_POST['ilosc']);
+        $kategoria = intval($_POST['kategoria']);
+        $zdjecie = mysqli_real_escape_string($conn, $_POST['zdjecie']);
+        $data_wygasniecia = mysqli_real_escape_string($conn, $_POST['data_wygasniecia']);
+        $data_utworzenia = date('Y-m-d');
+        $data_modyfikacji = date('Y-m-d');
+        
+        $query = "INSERT INTO products (tytul, cena_netto, podatek_vat, ilosc, kategoria, zdjecie, 
+                                      data_utworzenia, data_modyfikacji, data_wygasniecia) 
+                 VALUES ('$tytul', $cena_netto, $podatek_vat, $ilosc, $kategoria, '$zdjecie', 
+                         '$data_utworzenia', '$data_modyfikacji', '$data_wygasniecia')";
+        
+        if(mysqli_query($conn, $query)) {
+            header("Location: admin.php?action=products&success=1");
+            exit();
+        }
+    }
+    
+    return FormularzProduktu();
+}
+
+// Edycja produktu
+function EdytujProdukt() {
+    global $conn;
+    
+    if(!isset($_GET['id'])) {
+        return '';
+    }
+    
+    $id = intval($_GET['id']);
+    
+    if(isset($_POST['submit'])) {
+        $tytul = mysqli_real_escape_string($conn, $_POST['tytul']);
+        $cena_netto = floatval($_POST['cena_netto']);
+        $podatek_vat = intval($_POST['podatek_vat']);
+        $ilosc = intval($_POST['ilosc']);
+        $kategoria = intval($_POST['kategoria']);
+        $zdjecie = mysqli_real_escape_string($conn, $_POST['zdjecie']);
+        $data_wygasniecia = mysqli_real_escape_string($conn, $_POST['data_wygasniecia']);
+        $data_modyfikacji = date('Y-m-d');
+        
+        $query = "UPDATE products SET 
+                    tytul = '$tytul',
+                    cena_netto = $cena_netto,
+                    podatek_vat = $podatek_vat,
+                    ilosc = $ilosc,
+                    kategoria = $kategoria,
+                    zdjecie = '$zdjecie',
+                    data_modyfikacji = '$data_modyfikacji',
+                    data_wygasniecia = '$data_wygasniecia'
+                 WHERE id = $id LIMIT 1";
+        
+        if(mysqli_query($conn, $query)) {
+            header("Location: admin.php?action=products&success=1");
+            exit();
+        }
+    }
+    
+    return FormularzProduktu($id);
+}
+
+// Usuwanie produktu
+function UsunProdukt() {
+    global $conn;
+    
+    if(isset($_GET['id'])) {
+        $id = intval($_GET['id']);
+        $query = "DELETE FROM products WHERE id = $id LIMIT 1";
+        mysqli_query($conn, $query);
+        header("Location: admin.php?action=products&success=1");
+        exit();
+    }
+}
+
 // Główna funkcja panelu administracyjnego
 // Zarządza wyświetlaniem odpowiednich widoków w zależności od akcji
 function PanelAdministracyjny() {
@@ -409,6 +673,7 @@ function PanelAdministracyjny() {
         $wynik = '<div class="admin-panel">';
         $wynik .= '<h1>Panel Administracyjny</h1>';
         $wynik .= '<div class="admin-options">';
+        $wynik .= '<a href="admin.php?action=products" class="btn-menu">Produkty</a>';
         $wynik .= '<a href="admin.php?action=categories" class="btn-menu">Kategorie</a>';
         $wynik .= '<a href="admin.php?action=logout" class="btn-logout">Wyloguj</a>';
         $wynik .= '</div>';
@@ -442,6 +707,18 @@ function PanelAdministracyjny() {
                     break;
                 case 'deletecategory':
                     UsunKategorie();
+                    break;
+                case 'products':
+                    $wynik .= PokazProdukty();
+                    break;
+                case 'addproduct':
+                    $wynik .= DodajProdukt();
+                    break;
+                case 'editproduct':
+                    $wynik .= EdytujProdukt();
+                    break;
+                case 'deleteproduct':
+                    UsunProdukt();
                     break;
                 default:
                     $wynik .= ListaPodstron();
