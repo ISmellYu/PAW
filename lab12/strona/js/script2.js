@@ -33,3 +33,5 @@ function showtime() {
     myTimerID = setTimeout("showtime()", 1000);
     myTimerRunning = true;
 }
+
+startclock();

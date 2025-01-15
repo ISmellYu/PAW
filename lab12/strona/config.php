@@ -17,3 +17,4 @@ if (!$conn) {
     echo '<b>przerwane połączenie </b>';
 }
 ?>
+

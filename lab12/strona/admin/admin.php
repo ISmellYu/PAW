@@ -289,14 +289,14 @@ function FormularzKategorii($id = null) {
             $nazwa = $row['nazwa'];
             $matka = $row['matka'];
             $tytul = 'Edytuj Kategorię';
-            $akcja = 'updatecategory';
+            $akcja = 'editcategory';
             $przycisk = 'Zapisz zmiany';
         }
     }
     
     $wynik = '<div class="panel-admin">';
     $wynik .= '<h2>' . $tytul . '</h2>';
-    $wynik .= '<form method="post" action="admin.php?action=' . $akcja . '" class="edit-form">';
+    $wynik .= '<form method="post" action="admin.php?action=' . $akcja . ($id ? '&id=' . $id : '') . '" class="edit-form">';
     
     if($id) {
         $wynik .= '<input type="hidden" name="id" value="' . $id . '">';
@@ -513,14 +513,14 @@ function FormularzProduktu($id = null) {
             $zdjecie = $row['zdjecie'];
             $data_wygasniecia = $row['data_wygasniecia'];
             $tytul_formularza = 'Edytuj Produkt';
-            $akcja = 'updateproduct';
+            $akcja = 'editproduct';
             $przycisk = 'Zapisz zmiany';
         }
     }
     
     $wynik = '<div class="panel-admin">';
     $wynik .= '<h2>' . $tytul_formularza . '</h2>';
-    $wynik .= '<form method="post" action="admin.php?action=' . $akcja . '" class="edit-form" enctype="multipart/form-data">';
+    $wynik .= '<form action="admin.php?action=' . $akcja . ($id ? '&id=' . $id : '') . '" method="post" class="admin-form">';
     
     if($id) {
         $wynik .= '<input type="hidden" name="id" value="' . $id . '">';
@@ -615,23 +615,20 @@ function DodajProdukt() {
 function EdytujProdukt() {
     global $conn;
     
-    if(!isset($_GET['id'])) {
-        return '';
-    }
-    
-    $id = intval($_GET['id']);
-    
-    if(isset($_POST['submit'])) {
-        $tytul = mysqli_real_escape_string($conn, $_POST['tytul']);
-        $cena_netto = floatval($_POST['cena_netto']);
-        $podatek_vat = intval($_POST['podatek_vat']);
-        $ilosc = intval($_POST['ilosc']);
-        $kategoria = intval($_POST['kategoria']);
-        $zdjecie = mysqli_real_escape_string($conn, $_POST['zdjecie']);
-        $data_wygasniecia = mysqli_real_escape_string($conn, $_POST['data_wygasniecia']);
-        $data_modyfikacji = date('Y-m-d');
+    if(isset($_GET['id'])) {
+        $id = intval($_GET['id']);
         
-        $query = "UPDATE products SET 
+        if($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $tytul = mysqli_real_escape_string($conn, $_POST['tytul']);
+            $cena_netto = floatval($_POST['cena_netto']);
+            $podatek_vat = floatval($_POST['podatek_vat']);
+            $ilosc = intval($_POST['ilosc']);
+            $kategoria = intval($_POST['kategoria']);
+            $zdjecie = mysqli_real_escape_string($conn, $_POST['zdjecie']);
+            $data_wygasniecia = mysqli_real_escape_string($conn, $_POST['data_wygasniecia']);
+            $data_modyfikacji = date('Y-m-d H:i:s');
+            
+            $query = "UPDATE products SET 
                     tytul = '$tytul',
                     cena_netto = $cena_netto,
                     podatek_vat = $podatek_vat,
@@ -641,14 +638,18 @@ function EdytujProdukt() {
                     data_modyfikacji = '$data_modyfikacji',
                     data_wygasniecia = '$data_wygasniecia'
                  WHERE id = $id LIMIT 1";
-        
-        if(mysqli_query($conn, $query)) {
-            header("Location: admin.php?action=products&success=1");
-            exit();
+            
+            if(mysqli_query($conn, $query)) {
+                header("Location: admin.php?action=products&success=1");
+                exit();
+            }
         }
+        
+        return FormularzProduktu($id);
     }
     
-    return FormularzProduktu($id);
+    header("Location: admin.php?action=products");
+    exit();
 }
 
 // Usuwanie produktu
@@ -684,18 +685,6 @@ function PanelAdministracyjny() {
         
         if(isset($_GET['action'])) {
             switch($_GET['action']) {
-                case 'edit':
-                    $wynik .= EdytujPodstrone();
-                    break;
-                case 'add':
-                    $wynik .= DodajNowaPodstrone();
-                    break;
-                case 'delete':
-                    UsunPodstrone();
-                    break;
-                case 'logout':
-                    Wyloguj();
-                    break;
                 case 'categories':
                     $wynik .= PokazKategorie();
                     break;
@@ -704,9 +693,6 @@ function PanelAdministracyjny() {
                     break;
                 case 'editcategory':
                     $wynik .= EdytujKategorie();
-                    break;
-                case 'deletecategory':
-                    UsunKategorie();
                     break;
                 case 'products':
                     $wynik .= PokazProdukty();
@@ -717,14 +703,20 @@ function PanelAdministracyjny() {
                 case 'editproduct':
                     $wynik .= EdytujProdukt();
                     break;
+                case 'deletecategory':
+                    UsunKategorie();
+                    break;
                 case 'deleteproduct':
                     UsunProdukt();
                     break;
+                case 'logout':
+                    Wyloguj();
+                    break;
                 default:
-                    $wynik .= ListaPodstron();
+                    $wynik .= PokazProdukty();
             }
         } else {
-            $wynik .= ListaPodstron();
+            $wynik .= PokazProdukty();
         }
         
         $wynik .= '</div>';
@@ -759,6 +751,8 @@ if(isset($_POST['update'])) {
     header("Location: admin.php");
     exit();
 }
+
+
 
 echo PanelAdministracyjny();
 ?>
